@@ -40,7 +40,6 @@ class TransformerBasedModel:
                     break
             if not found:
                 sentence_score *= epsilon
-        print('calculating score done.')
         return sentence_score
 
     def find_ordered_sentence_using_some_permutations(self, sentences_list, k=None, epsilon=None, print_data=False):
