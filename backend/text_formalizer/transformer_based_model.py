@@ -15,7 +15,7 @@ class TransformerBasedModel:
         print('model loading done.')
 
     def calculate_sentence_score(self, sentence, k=None, epsilon=None):
-        print('calculating score for',sentence,'...')
+        print('calculating score for', sentence, '...')
         if k is None:
             k = self.k
         if epsilon is None:
@@ -43,6 +43,25 @@ class TransformerBasedModel:
         print('calculating score done.')
         return sentence_score
 
+    def find_ordered_sentence_using_some_permutations(self, sentences_list, k=None, epsilon=None, print_data=False):
+        if k is None:
+            k = self.k
+        if epsilon is None:
+            epsilon = self.epsilon
+        scores = []
+        for i, sentence in enumerate(sentences_list):
+            score = self.calculate_sentence_score(sentence, k, epsilon)
+            if print_data:
+                print(sentence)
+                print(score)
+                print(i + 1, '/', len(sentences_list))
+            scores.append((sentence, score))
+        if print_data:
+            scores.sort(key=lambda x: x[1], reverse=True)
+            for score in scores:
+                print(score)
+        return max(scores, key=lambda x: x[1])[0]
+
     def find_ordered_sentence_using_all_permutations(self, sentence, k=None, epsilon=None, print_data=False):
         if k is None:
             k = self.k
@@ -53,7 +72,7 @@ class TransformerBasedModel:
         scores = []
         for i, permutation in enumerate(permutations):
             permutation_sentence = ' '.join(permutation)
-            score = self.calculate_sentence_score(permutation_sentence)
+            score = self.calculate_sentence_score(permutation_sentence, k, epsilon)
             if print_data:
                 print(permutation_sentence)
                 print(score)
